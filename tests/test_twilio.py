@@ -20,7 +20,10 @@ class TwiMLTest(unittest.TestCase):
             'To': '+16666666666',
             'Body': body,
             'ApiVersion': '2010-04-01',
-            'Direction': 'inbound'}
+            'Direction': 'inbound',
+            'FromCity': 'BROOKLYN',
+            'FromState': 'NY',
+            'FromZip': '11211'}
         return self.app.post(path, data=params)
 
     def call(self, path='/voice', number='+15555555555', digits=None):
@@ -41,6 +44,7 @@ class ExampleTests(TwiMLTest):
     def test_sms(self):
         response = self.sms("Test")
         self.assertTwiML(response)
+        self.assertTrue("Conditions" in response)
 
     def test_voice(self):
         response = self.call()
