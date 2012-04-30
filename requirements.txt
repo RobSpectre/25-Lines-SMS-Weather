@@ -3,3 +3,4 @@ Flask-SQLAlchemy==0.15
 twilio==3.3.6
 mock==0.8.0
 requests==0.11.2
+simplejson==2.4.0
