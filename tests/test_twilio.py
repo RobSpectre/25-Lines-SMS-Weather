@@ -44,8 +44,4 @@ class ExampleTests(TwiMLTest):
     def test_sms(self):
         response = self.sms("Test")
         self.assertTwiML(response)
-        self.assertTrue("Conditions" in response)
-
-    def test_voice(self):
-        response = self.call()
-        self.assertTwiML(response)
+        self.assertTrue("Conditions" in response.data)

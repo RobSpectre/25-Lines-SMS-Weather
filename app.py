@@ -7,17 +7,16 @@ app = flask.Flask(__name__, static_url_path='/static')
 app.config.from_pyfile('local_settings.py')
 @app.route('/sms', methods=['GET', 'POST'])
 def sms():
-    path = "http://api.wunderground.com/api/%s/geolookup/conditions/q/%s/%s.json" \
+    path = "http://api.wunderground.com/api/%s/conditions/q/%s/%s.json" \
             % (app.config['WUNDERGROUND_API_KEY'],
                     flask.request.form['FromState'],
                     flask.request.form['FromCity'].title().replace(' ', '_'))
-    print path
     response = requests.get(path)
-    conditions = json.loads(response.text)
-    current = conditions['location']['city']['current_observation']
+    current = json.loads(response.text)['current_observation']
     response = twiml.Response()
-    response.sms("Conditions: %s, Temp: %s, Humidity: %s" % (current['weather'],
-        current['temp_f'], current['relative_humidity']))
+    response.sms("Location: %s\n Conditions: %s\n Temp: %s\n Humidity: %s\n" %
+            (current['observation_location']['city'], current['weather'],
+                current['temp_f'], current['relative_humidity']))
     return str(response)
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
