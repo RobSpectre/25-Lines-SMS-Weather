@@ -1,5 +1,9 @@
 import unittest
+import requests
+from mock import Mock
+from mock import patch
 from .context import app
+
 
 class TwiMLTest(unittest.TestCase):
     def setUp(self):
@@ -41,7 +45,25 @@ class TwiMLTest(unittest.TestCase):
 
 
 class ExampleTests(TwiMLTest):
-    def test_sms(self):
+    @patch.object(requests, 'get')
+    def test_sms(self, mock_get):
+        test_file = file('./tests/test_assets/good_response.json')
+        mock_response = Mock()
+        mock_response.text = test_file.read()
+        mock_get.return_value = mock_response 
         response = self.sms("Test")
         self.assertTwiML(response)
-        self.assertTrue("Conditions" in response.data)
+        self.assertTrue("Location" in response.data, "App did not return " \
+                "weather information, instead: %s" % response.data)
+
+    @patch.object(requests, 'get')
+    def test_smsInvalidLocation(self, mock_get):
+        test_file = file('./tests/test_assets/bad_response.json')
+        mock_response = Mock()
+        mock_response.text = test_file.read()
+        mock_get.return_value = mock_response 
+        response = self.sms("Test")
+        self.assertTwiML(response)
+        self.assertFalse("Location" in response.data, "App did returned " \
+                "weather information when it shouldn't have: %s" \
+                % response.data)
