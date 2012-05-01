@@ -31,6 +31,11 @@ to make a super simple SMS weather reporter.
 
 ## Usage
 
+Text anything to (646) 606-2458 to see it work!
+
+![Example of it
+working](https://raw.github.com/RobSpectre/25-Lines-SMS-Weather/master/images/usage.png)
+
 
 ## Installation
 
