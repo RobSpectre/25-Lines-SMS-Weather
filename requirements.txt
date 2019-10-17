@@ -1,4 +1,4 @@
-Flask==0.8
+Flask==1.0
 twilio==3.3.6
 mock==0.8.0
 requests==0.11.2
